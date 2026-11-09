@@ -30,14 +30,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['toggle_theme'])) {
         $used = isset($_SESSION['vault_run']['hints_used'][$currentRoomId])
             ? (int)$_SESSION['vault_run']['hints_used'][$currentRoomId]
             : 0;
-        $nextTier = $used + 1;
-        $cost = getHintCost($nextTier);
-        $_SESSION['vault_run']['hints_used'][$currentRoomId] = $nextTier;
-        $_SESSION['vault_run']['score'] = max(0, (int)$_SESSION['vault_run']['score'] - $cost);
-        $_SESSION['room_feedback'] = array(
-            'type' => 'info',
-            'text' => 'Unlocked Hint ' . $nextTier . ' (-' . $cost . ' points).'
-        );
+        if ($used >= 3) {
+            $_SESSION['room_feedback'] = array(
+                'type' => 'info',
+                'text' => 'All 3 hints for this room are already unlocked (0 points deducted).'
+            );
+        } else {
+            $nextTier = $used + 1;
+            $cost = getHintCost($nextTier);
+            $_SESSION['vault_run']['hints_used'][$currentRoomId] = $nextTier;
+            $_SESSION['vault_run']['score'] = max(0, (int)$_SESSION['vault_run']['score'] - $cost);
+            $_SESSION['room_feedback'] = array(
+                'type' => 'info',
+                'text' => 'Unlocked Hint ' . $nextTier . ' (-' . $cost . ' points).'
+            );
+        }
+        header('Location: room.php');
+        exit;
     }
 
     if (isset($_POST['submit_answer'])) {
@@ -75,6 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['toggle_theme'])) {
                 );
             }
         }
+        header('Location: room.php');
+        exit;
     }
 }
 
