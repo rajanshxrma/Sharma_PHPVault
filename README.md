@@ -26,3 +26,7 @@ then open `http://localhost:8000/index.php` in your browser.
 - test 1 (normal run): log in as `rajan`, unlock hint 1 in room 1 (-10 pts, score 290), submit `VAULT`, `63`, and `4285` -> redirects to `results.php` with 290 pts and adds the run to `leaderboard.php`.
 - test 2 (boundary / hint cap): click `Get Hint` 3 times in room 1 (score drops from 300 to 290, 270, 240), then click it a 4th time -> php keeps score at 240 pts and prints that all 3 hints are already unlocked.
 - test 3 (invalid / empty input): submit an empty answer in `room.php` -> php shows an error without taking off 10 points; submit a 3-letter word `ABC` in room 1 -> takes off 10 points and warns that the passkey has 5 letters.
+
+## references and disclosure
+- php manual (`session_start`, `password_hash`, `password_verify`, `htmlspecialchars`, `usort`, `setcookie`) and mdn html/css documentation.
+- ai disclosure: used ai tools during development to review php session concepts and check edge cases; all project php, html, and css code was written, tested, and verified on codd.
